@@ -1,7 +1,8 @@
 
 /*/*  ----------------------- BODY --------------------------- */
-
-
+.pad-top{
+    padding-top:2%;
+}
 /*  ----------------------- HEADER --------------------------- */
 header {
 } // end of header
@@ -9,6 +10,34 @@ header {
 /*  ----------------------- NAVIGATION --------------------------- */
 nav {
 } // end nav
+
+
+#custom-nav {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    opacity: 1;
+    box-shadow: none;
+    z-index: 999;
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-transition: background .5s ease-in-out, opacity .5s ease;
+    -moz-transition: background .5s ease-in-out, opacity .5s ease;
+    transition: background .5s ease-in-out, opacity .5s ease;
+}
+
+#custom-nav.affix {
+    top: 0;
+    min-width: 100%;
+    padding-top: .25em;
+    padding-bottom: .5em;
+    opacity: .9;
+    -webkit-transition: background .5s ease-in-out, opacity .5s ease, padding .8s;
+    -moz-transition: background .5s ease-in-out, opacity .5s ease, padding .8s;
+    -webkit-transition: padding-top .5s ease, padding-bottom .5s ease;
+    -moz-transition: padding-top .5s ease, padding-bottom .5s ease;
+    transition: background .5s ease-in-out, opacity .5s ease, padding-top .5s ease, padding-top .5s ease, padding-bottom .5s ease;
+}
 
 /*  ----------------------- MAIN --------------------------- */
 html,

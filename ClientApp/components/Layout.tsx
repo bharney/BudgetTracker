@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { NavMenu } from './NavMenu';
+import { SliderMenu } from './SliderMenu';
+import { Footer } from './Footer';
 
 export class Layout extends React.Component<{}, {}> {
     public render() {
-        return <div className="container">
-            <div className="row row-offcanvas row-offcanvas-right">
-                <div className="col-12 col-md-9">
+        return <div>
                     <NavMenu />
-                    {this.props.children}
-                    <footer>
-                        <p>&copy; Company 2017</p>
-                    </footer>
-                </div>
-            </div>
+                    <div className="container pad-top">
+                        <div id="slider" className="row row-offcanvas row-offcanvas-right">
+                            <div className="col-12 col-md-9">
+                                {this.props.children}
+                            </div>
+                            <SliderMenu />
+                        </div>
+                    </div>
+                    <Footer />
         </div>;
     }
 }
