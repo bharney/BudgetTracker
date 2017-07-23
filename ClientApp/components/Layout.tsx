@@ -3,13 +3,14 @@ import { NavMenu } from './NavMenu';
 
 export class Layout extends React.Component<{}, {}> {
     public render() {
-        return <div className='container-fluid'>
-            <div className='row'>
-                <div className='col-sm-3'>
+        return <div className="container">
+            <div className="row row-offcanvas row-offcanvas-right">
+                <div className="col-12 col-md-9">
                     <NavMenu />
-                </div>
-                <div className='col-sm-9'>
-                    { this.props.children }
+                    {this.props.children}
+                    <footer>
+                        <p>&copy; Company 2017</p>
+                    </footer>
                 </div>
             </div>
         </div>;
