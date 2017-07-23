@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const merge = require('webpack-merge');
+const bundleOutputDir = './wwwroot/dist';
 
 module.exports = (env) => {
     const isDevBuild = !(env && env.prod);
@@ -57,34 +58,36 @@ module.exports = (env) => {
                 moduleFilenameTemplate: path.relative(clientBundleOutputDir, '[resourcePath]') // Point sourcemap entries to the original file locations on disk
             })
         ] : [
-            // Plugins that apply in production builds only
-            //new HtmlWebpackPlugin({
-            //    template: path.relative(clientBundleOutputDir, '[resourcePath]'),
-            //    minify: {
-            //        removeComments: true,
-            //        collapseWhitespace: true,
-            //        removeRedundantAttributes: true,
-            //        useShortDoctype: true,
-            //        removeEmptyAttributes: true,
-            //        removeStyleLinkTypeAttributes: true,
-            //        keepClosingSlash: true,
-            //        minifyJS: true,
-            //        minifyCSS: true,
-            //        minifyURLs: true
-            //    },
-            //    inject: true,
-            //    // Note that you can add custom options here if you need to handle other custom logic in index.html
-            //    // To track JavaScript errors via TrackJS, sign up for a free trial at TrackJS.com and enter your token below.
-            //    trackJSToken: ''
-            //}),
-            new webpack.optimize.UglifyJsPlugin()
-            //new CompressionPlugin({
-			//            asset: "[path].gz[query]",
-			//            algorithm: "gzip",
-			//            test: /\.(js|html)$/,
-			//            threshold: 10240,
-			//            minRatio: 0.8
-		    //})
+             //Plugins that apply in production builds only
+            new HtmlWebpackPlugin({
+                template: path.relative(clientBundleOutputDir, '[resourcePath]'),
+                minify: {
+                    removeComments: true,
+                    collapseWhitespace: true,
+                    removeRedundantAttributes: true,
+                    useShortDoctype: true,
+                    removeEmptyAttributes: true,
+                    removeStyleLinkTypeAttributes: true,
+                    keepClosingSlash: true,
+                    minifyJS: true,
+                    minifyCSS: true,
+                    minifyURLs: true
+                },
+                inject: true,
+                // Note that you can add custom options here if you need to handle other custom logic in index.html
+                // To track JavaScript errors via TrackJS, sign up for a free trial at TrackJS.com and enter your token below.
+                trackJSToken: ''
+            }),
+            new webpack.optimize.DedupePlugin(),
+            new webpack.optimize.AggressiveMergingPlugin(),
+            new webpack.optimize.UglifyJsPlugin(),
+            new CompressionPlugin({
+                asset: "[path].gz[query]",
+                algorithm: "gzip",
+                test: /\.(js|html)$/,
+                threshold: 10240,
+                minRatio: 0.8
+            })
         ])
     });
 

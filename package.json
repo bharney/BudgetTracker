@@ -1,6 +1,6 @@
 {
   "name": "BudgetTracker",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "devDependencies": {
     "@types/history": "4.5.1",
     "@types/react": "15.0.24",
