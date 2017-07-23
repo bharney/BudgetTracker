@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
+const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = (env) => {
     const isDevBuild = !(env && env.prod);
@@ -67,35 +68,21 @@ module.exports = (env) => {
                 name: '[name]_[hash]'
             })
         ].concat(isDevBuild ? [] : [
-            new HtmlWebpackPlugin({
-                template: path.relative(clientBundleOutputDir, '[resourcePath]'),
-                minify: {
-                    removeComments: true,
-                    collapseWhitespace: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    removeStyleLinkTypeAttributes: true,
-                    keepClosingSlash: true,
-                    minifyJS: true,
-                    minifyCSS: true,
-                    minifyURLs: true
-                },
-                inject: true,
-                // Note that you can add custom options here if you need to handle other custom logic in index.html
-                // To track JavaScript errors via TrackJS, sign up for a free trial at TrackJS.com and enter your token below.
-                trackJSToken: ''
+             new webpack.optimize.UglifyJsPlugin({
+                  mangle: true,
+                  compress: {
+                    warnings: false, // Suppress uglification warnings
+                    pure_getters: true,
+                    unsafe: true,
+                    unsafe_comps: true,
+                    screw_ie8: true
+                  },
+                  output: {
+                    comments: false,
+                  },
+                  exclude: [/\.min\.js$/gi] // skip pre-minified libs
             }),
-            new webpack.optimize.UglifyJsPlugin(),
-            new webpack.optimize.DedupePlugin(),
-            new webpack.optimize.AggressiveMergingPlugin(),
-            new CompressionPlugin({
-                asset: "[path].gz[query]",
-                algorithm: "gzip",
-                test: /\.(js|html)$/,
-                threshold: 10240,
-                minRatio: 0.8
-            })
+            new webpack.optimize.AggressiveMergingPlugin()
         ])
     });
 
