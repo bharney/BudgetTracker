@@ -1,15 +1,17 @@
 
 /*/*  ----------------------- BODY --------------------------- */
-.pad-top{
-    padding-top:2%;
+.pad-top {
+    padding-top: 2%;
 }
 /*  ----------------------- HEADER --------------------------- */
 header {
-} // end of header
+}
+
 
 /*  ----------------------- NAVIGATION --------------------------- */
 nav {
-} // end nav
+}
+
 
 
 #custom-nav {
@@ -54,8 +56,8 @@ footer {
 }
 
 main {
-
-} // end main
+}
+// end main
 
 /*
  * Off Canvas
@@ -110,4 +112,5 @@ main {
 
 /*  ----------------------- FOOTER --------------------------- */
 footer {
-} // end footer*/
+}
+

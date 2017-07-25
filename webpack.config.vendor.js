@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
+const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = (env) => {
     const isDevBuild = !(env && env.prod);
@@ -12,7 +13,13 @@ module.exports = (env) => {
         resolve: { extensions: [ '.js' ] },
         module: {
             rules: [
-                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
+                { test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader' },
+                { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
+                { test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=application/octet-stream' },
+                { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=image/svg+xml' },
+                { test: /\.(jpe?g|png|gif)$/, loader: 'file-loader?name=[name].[ext]' },
+                { test: /\.(woff|ttf|eot|svg)(\?v=[a-z0-9]\.[a-z0-9]\.[a-z0-9])?$/, loader: 'url-loader?limit=100000' },
+                { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url-loader?limit=10000&mimetype=application/octet-stream" }
             ]
         },
         entry: {
@@ -51,7 +58,7 @@ module.exports = (env) => {
         output: { path: path.join(__dirname, 'wwwroot', 'dist') },
         module: {
             rules: [
-                { test: /\.css(\?|$)/, use: extractCSS.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) }
+                { test: /\.css(\?|$)/, use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }
             ]
         },
         plugins: [
@@ -61,34 +68,21 @@ module.exports = (env) => {
                 name: '[name]_[hash]'
             })
         ].concat(isDevBuild ? [] : [
-            // Plugins that apply in production builds only
-            //new HtmlWebpackPlugin({
-            //    template: '',
-            //    minify: {
-            //        removeComments: true,
-            //        collapseWhitespace: true,
-            //        removeRedundantAttributes: true,
-            //        useShortDoctype: true,
-            //        removeEmptyAttributes: true,
-            //        removeStyleLinkTypeAttributes: true,
-            //        keepClosingSlash: true,
-            //        minifyJS: true,
-            //        minifyCSS: true,
-            //        minifyURLs: true
-            //    },
-            //    inject: true,
-            //    // Note that you can add custom options here if you need to handle other custom logic in index.html
-            //    // To track JavaScript errors via TrackJS, sign up for a free trial at TrackJS.com and enter your token below.
-            //    trackJSToken: ''
-            //}),
-            new webpack.optimize.UglifyJsPlugin()
-            //new CompressionPlugin({
-			//            asset: "[path].gz[query]",
-			//            algorithm: "gzip",
-			//            test: /\.(js|html)$/,
-			//            threshold: 10240,
-			//            minRatio: 0.8
-		    //})
+             new webpack.optimize.UglifyJsPlugin({
+                  mangle: true,
+                  compress: {
+                    warnings: false, // Suppress uglification warnings
+                    pure_getters: true,
+                    unsafe: true,
+                    unsafe_comps: true,
+                    screw_ie8: true
+                  },
+                  output: {
+                    comments: false,
+                  },
+                  exclude: [/\.min\.js$/gi] // skip pre-minified libs
+            }),
+            new webpack.optimize.AggressiveMergingPlugin()
         ])
     });
 
@@ -100,7 +94,9 @@ module.exports = (env) => {
             libraryTarget: 'commonjs2',
         },
         module: {
-            rules: [ { test: /\.css(\?|$)/, use: isDevBuild ? 'css-loader' : 'css-loader?minimize' } ]
+            rules: [
+                { test: /\.css(\?|$)/, use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }
+            ]
         },
         entry: { vendor: ['aspnet-prerendering', 'react-dom/server'] },
         plugins: [
