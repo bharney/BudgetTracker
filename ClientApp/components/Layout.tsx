@@ -7,14 +7,14 @@ export class Layout extends React.Component<{}, {}> {
     public render() {
         return <div>
                     <NavMenu />
-                    <div className="container pad-top">
+                    <main className="container pad-top">
                         <div id="slider" className="row row-offcanvas row-offcanvas-right">
                             <div className="col-12 col-md-9">
                                 {this.props.children}
                             </div>
                             <SliderMenu />
                         </div>
-                    </div>
+                    </main>
                     <Footer />
                </div>;
     }
